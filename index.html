@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SecurePay — Payments Solution For Everyone</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,700;12..96,800&family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+  --bg:#03050e; --bg2:#060a18; --bg3:#080e1f;
+  --card:#0b1228; --card2:#0e1630;
+  --border:rgba(80,130,255,.11); --border2:rgba(80,130,255,.22);
+  --blue:#3d7fff; --teal:#00d4b4; --violet:#7b5fff;
+  --gold:#f0c040; --red:#ff5a5a;
+  --text:#dce8ff; --muted:#5b6e99; --bright:#ffffff;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:16px;line-height:1.65;overflow-x:hidden}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 64px;background:rgba(3,5,14,.78);backdrop-filter:blur(24px) saturate(160%);border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:11px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.2rem;color:var(--bright);text-decoration:none;letter-spacing:-.025em}
+.logo-mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--blue),var(--violet));display:flex;align-items:center;justify-content:center;font-size:.95rem;box-shadow:0 0 22px rgba(61,127,255,.45);flex-shrink:0}
+.nav-links{display:flex;gap:34px;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.875rem;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--bright)}
+.nav-right{display:flex;gap:10px;align-items:center}
+.btn-g{padding:8px 18px;border:1px solid var(--border);background:transparent;color:var(--text);border-radius:8px;font-size:.85rem;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
+.btn-g:hover{border-color:var(--blue);color:var(--bright)}
+.btn-p{padding:9px 20px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:.85rem;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;box-shadow:0 0 18px rgba(61,127,255,.35)}
+.btn-p:hover{background:#2d70f0;box-shadow:0 0 28px rgba(61,127,255,.55)}
+
+/* TICKER */
+.ticker{position:relative;z-index:10;margin-top:68px;background:rgba(61,127,255,.05);border-bottom:1px solid var(--border);padding:9px 0;overflow:hidden}
+.ticker-track{display:flex;gap:72px;white-space:nowrap;animation:tick 26s linear infinite}
+@keyframes tick{to{transform:translateX(-50%)}}
+.ti{display:flex;align-items:center;gap:9px;font-size:.75rem;color:var(--muted);letter-spacing:.04em;font-weight:500}
+.ti-dot{width:5px;height:5px;border-radius:50%;background:var(--teal);flex-shrink:0}
+
+/* HERO */
+.hero{position:relative;min-height:93vh;display:flex;align-items:center;justify-content:center;padding:80px 64px 100px;overflow:hidden}
+.hero-mesh{position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse 55% 50% at 65% 45%,rgba(61,127,255,.1) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 25% 60%,rgba(123,95,255,.08) 0%,transparent 65%),radial-gradient(ellipse 30% 30% at 80% 75%,rgba(0,212,180,.07) 0%,transparent 60%)}
+.hero-grid{position:absolute;inset:0;z-index:1;background-image:linear-gradient(rgba(61,127,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(61,127,255,.04) 1px,transparent 1px);background-size:52px 52px;mask-image:radial-gradient(ellipse 90% 70% at 50% 40%,black 20%,transparent 100%)}
+.hero-inner{position:relative;z-index:10;max-width:1200px;width:100%;display:grid;grid-template-columns:1.05fr 1fr;gap:72px;align-items:center}
+.badge{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(61,127,255,.25);border-radius:100px;background:rgba(61,127,255,.08);padding:5px 15px 5px 7px;font-size:.73rem;font-weight:600;color:#8ab4ff;letter-spacing:.04em;margin-bottom:26px;animation:fadeUp .5s ease both}
+.badge-dot{width:22px;height:22px;border-radius:50%;background:rgba(0,212,180,.15);display:flex;align-items:center;justify-content:center;font-size:.65rem;color:var(--teal)}
+h1.hero-h{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(2.6rem,5vw,4rem);line-height:1.06;letter-spacing:-.04em;color:var(--bright);margin-bottom:22px;animation:fadeUp .6s .1s ease both}
+h1.hero-h .grad{background:linear-gradient(100deg,var(--blue) 0%,var(--teal) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:1rem;color:var(--muted);line-height:1.8;max-width:490px;margin-bottom:38px;animation:fadeUp .6s .2s ease both}
+.hero-actions{display:flex;gap:14px;align-items:center;animation:fadeUp .6s .3s ease both;margin-bottom:44px}
+.btn-hero{padding:13px 30px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:.95rem;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;display:flex;align-items:center;gap:9px;transition:all .25s;box-shadow:0 0 28px rgba(61,127,255,.38)}
+.btn-hero:hover{transform:translateY(-2px);box-shadow:0 8px 36px rgba(61,127,255,.55)}
+.btn-hero .arr{transition:transform .2s}
+.btn-hero:hover .arr{transform:translateX(4px)}
+.btn-sec{padding:13px 26px;background:rgba(255,255,255,.05);color:var(--text);border:1px solid var(--border);border-radius:10px;font-size:.95rem;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s}
+.btn-sec:hover{border-color:var(--blue);color:var(--bright)}
+.trust-row{display:flex;align-items:center;gap:16px;animation:fadeUp .6s .4s ease both}
+.t-avs{display:flex}
+.t-av{width:30px;height:30px;border-radius:50%;border:2px solid var(--bg);display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:700;margin-left:-7px;flex-shrink:0}
+.t-av:first-child{margin-left:0}
+.t-av:nth-child(1){background:linear-gradient(135deg,#3d7fff,#7b5fff)}
+.t-av:nth-child(2){background:linear-gradient(135deg,#00d4b4,#3d7fff)}
+.t-av:nth-child(3){background:linear-gradient(135deg,#f0c040,#ff7a3d)}
+.t-av:nth-child(4){background:linear-gradient(135deg,#7b5fff,#00d4b4)}
+.t-txt{font-size:.8rem;color:var(--muted);line-height:1.55}
+.t-txt strong{display:block;color:var(--bright);font-weight:600}
+
+/* 3D CARD */
+.hero-vis{animation:fadeUp .7s .15s ease both;perspective:1400px;position:relative}
+.vis-scene{position:relative;padding:50px 30px 50px;max-width:440px;margin:0 auto}
+.p-card{width:340px;height:208px;border-radius:22px;background:linear-gradient(145deg,#132050 0%,#0c1640 50%,#080f2e 100%);border:1px solid rgba(61,127,255,.28);padding:26px 28px;position:relative;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.65),0 0 60px rgba(61,127,255,.1);transform:rotateY(-9deg) rotateX(5deg);animation:cardBob 7s ease-in-out infinite;transition:transform .5s ease;cursor:default;margin:0 auto}
+.p-card:hover{transform:rotateY(-2deg) rotateX(1deg)}
+@keyframes cardBob{0%,100%{transform:rotateY(-9deg) rotateX(5deg) translateY(0)}50%{transform:rotateY(-9deg) rotateX(5deg) translateY(-10px)}}
+.c-shine{position:absolute;inset:0;background:linear-gradient(130deg,rgba(255,255,255,.07) 0%,transparent 45%);border-radius:22px;pointer-events:none}
+.c-glare{position:absolute;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(61,127,255,.18) 0%,transparent 70%);top:-80px;right:-60px;pointer-events:none}
+.c-chip{width:38px;height:29px;border-radius:6px;background:linear-gradient(140deg,#f0c040,#c88e00);margin-bottom:18px;position:relative;overflow:hidden}
+.c-chip::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.22) 0,rgba(255,255,255,.22) 1px,transparent 1px,transparent 5px)}
+.c-num{font-size:.9rem;letter-spacing:.2em;color:rgba(255,255,255,.8);font-family:'Bricolage Grotesque',sans-serif;margin-bottom:14px}
+.c-bot{display:flex;justify-content:space-between;align-items:flex-end}
+.c-lbl{font-size:.65rem;color:rgba(255,255,255,.4);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px}
+.c-name{font-size:.85rem;color:rgba(255,255,255,.88);font-weight:600}
+.c-brand{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.05rem;color:rgba(255,255,255,.85);letter-spacing:-.02em}
+
+/* FLOATERS */
+.fl{position:absolute;border-radius:14px;background:rgba(10,18,42,.92);border:1px solid var(--border);backdrop-filter:blur(18px);padding:13px 16px;box-shadow:0 18px 48px rgba(0,0,0,.4)}
+.fl-1{top:0;right:-10px;display:flex;align-items:center;gap:11px;min-width:168px;animation:fl1 5s ease-in-out infinite}
+.fl-2{left:-14px;bottom:10px;min-width:158px;animation:fl2 6.5s ease-in-out infinite}
+.fl-3{right:10px;bottom:-5px;display:flex;align-items:center;gap:10px;animation:fl3 5.5s ease-in-out infinite}
+@keyframes fl1{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes fl2{0%,100%{transform:translateY(0)}50%{transform:translateY(9px)}}
+@keyframes fl3{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.fl-ico{width:36px;height:36px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1rem}
+.fl-ico.g{background:rgba(0,212,180,.12);color:var(--teal)}
+.fl-ico.b{background:rgba(61,127,255,.12);color:var(--blue)}
+.fl-lbl{font-size:.68rem;color:var(--muted);margin-bottom:2px}
+.fl-val{font-family:'Bricolage Grotesque',sans-serif;font-size:.98rem;font-weight:700;color:var(--bright)}
+.fl-val.pos{color:var(--teal)}
+.fl-mini{font-size:.7rem;color:var(--muted);margin-bottom:2px}
+.fl-mval{font-size:.82rem;font-weight:600;color:var(--bright)}
+.sec-ring{width:36px;height:36px;border-radius:50%;background:rgba(0,212,180,.1);color:var(--teal);display:flex;align-items:center;justify-content:center;font-size:.95rem;position:relative;flex-shrink:0}
+.sec-ring::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1.5px dashed rgba(0,212,180,.25);animation:spinRing 9s linear infinite}
+@keyframes spinRing{to{transform:rotate(360deg)}}
+
+/* STATS */
+.stats{position:relative;z-index:10;background:rgba(8,14,31,.6);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:24px 64px;display:flex;justify-content:center}
+.stat{flex:1;max-width:220px;text-align:center;padding:8px 24px;border-right:1px solid var(--border)}
+.stat:last-child{border-right:none}
+.s-num{font-family:'Bricolage Grotesque',sans-serif;font-size:2.1rem;font-weight:800;line-height:1.1;margin-bottom:4px;color:var(--bright)}
+.s-num .hl{color:var(--teal)}
+.s-lbl{font-size:.78rem;color:var(--muted);letter-spacing:.03em}
+
+/* PARTNERS */
+.partners{padding:36px 64px;border-bottom:1px solid var(--border);position:relative;z-index:10}
+.p-lbl{text-align:center;font-size:.73rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:26px}
+.p-row{display:flex;justify-content:center;align-items:center;gap:52px;flex-wrap:wrap}
+.p-item{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1rem;color:rgba(255,255,255,.18);letter-spacing:.06em;text-transform:uppercase;transition:color .3s;cursor:default}
+.p-item:hover{color:rgba(255,255,255,.45)}
+
+/* SECTIONS */
+.sec{padding:96px 64px;position:relative;z-index:10}
+.sec-inner{max-width:1200px;margin:0 auto}
+.sec-alt{background:var(--bg2)}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:14px}
+.eyebrow::before{content:'';width:20px;height:2px;background:var(--blue);border-radius:2px}
+.sec-h{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(1.9rem,3.2vw,2.8rem);font-weight:800;letter-spacing:-.035em;color:var(--bright);line-height:1.1;margin-bottom:14px}
+.sec-sub{font-size:.95rem;color:var(--muted);max-width:500px;line-height:1.75;margin-bottom:56px}
+
+/* TABS */
+.tabs{display:flex;gap:6px;margin-bottom:36px;flex-wrap:wrap}
+.tab{padding:9px 20px;border-radius:100px;font-size:.82rem;font-weight:600;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.tab:hover{border-color:var(--blue);color:var(--text)}
+.tab.active{background:rgba(61,127,255,.12);border-color:rgba(61,127,255,.3);color:#8ab4ff}
+.tab-content{display:none}
+.tab-content.active{display:grid}
+.products-grid{grid-template-columns:repeat(3,1fr);gap:20px}
+
+/* PROD CARDS */
+.prod-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px 24px;transition:all .3s;cursor:default;position:relative;overflow:hidden}
+.prod-card::before{content:'';position:absolute;inset:0;border-radius:18px;background:linear-gradient(135deg,rgba(61,127,255,.05) 0%,transparent 55%);opacity:0;transition:opacity .3s}
+.prod-card:hover{border-color:rgba(61,127,255,.28);transform:translateY(-4px)}
+.prod-card:hover::before{opacity:1}
+.pc-ico{width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:1.35rem;margin-bottom:18px}
+.pc-ico.b{background:rgba(61,127,255,.1)}
+.pc-ico.t{background:rgba(0,212,180,.1)}
+.pc-ico.v{background:rgba(123,95,255,.1)}
+.pc-ico.g{background:rgba(240,192,64,.1)}
+.pc-ico.r{background:rgba(255,90,90,.1)}
+.pc-title{font-family:'Bricolage Grotesque',sans-serif;font-size:1.05rem;font-weight:700;color:var(--bright);margin-bottom:8px}
+.pc-desc{font-size:.84rem;color:var(--muted);line-height:1.7}
+.pc-link{display:inline-flex;align-items:center;gap:6px;margin-top:14px;font-size:.8rem;font-weight:600;color:var(--blue);text-decoration:none;transition:gap .2s}
+.pc-link:hover{gap:10px}
+.tag{display:inline-block;padding:3px 11px;border-radius:100px;font-size:.7rem;font-weight:600;letter-spacing:.04em;margin-top:12px}
+.tag.t{background:rgba(0,212,180,.1);color:var(--teal);border:1px solid rgba(0,212,180,.15)}
+.tag.b{background:rgba(61,127,255,.1);color:#8ab4ff;border:1px solid rgba(61,127,255,.15)}
+.tag.v{background:rgba(123,95,255,.1);color:#b09eff;border:1px solid rgba(123,95,255,.15)}
+.tag.g{background:rgba(240,192,64,.1);color:var(--gold);border:1px solid rgba(240,192,64,.15)}
+
+/* STEPS */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;margin-top:16px}
+.steps::before{content:'';position:absolute;top:35px;left:calc(12.5% + 18px);right:calc(12.5% + 18px);height:1px;background:linear-gradient(90deg,var(--blue),var(--teal));opacity:.2}
+.step{text-align:center;padding:0 20px;position:relative}
+.step-n{width:70px;height:70px;border-radius:50%;margin:0 auto 18px;display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',sans-serif;font-size:1.4rem;font-weight:800;position:relative;z-index:2}
+.step:nth-child(1) .step-n{background:rgba(61,127,255,.1);color:var(--blue);border:2px solid rgba(61,127,255,.28)}
+.step:nth-child(2) .step-n{background:rgba(0,212,180,.1);color:var(--teal);border:2px solid rgba(0,212,180,.28)}
+.step:nth-child(3) .step-n{background:rgba(123,95,255,.1);color:var(--violet);border:2px solid rgba(123,95,255,.28)}
+.step:nth-child(4) .step-n{background:rgba(240,192,64,.1);color:var(--gold);border:2px solid rgba(240,192,64,.28)}
+.step-t{font-family:'Bricolage Grotesque',sans-serif;font-size:.95rem;font-weight:700;color:var(--bright);margin-bottom:9px}
+.step-d{font-size:.83rem;color:var(--muted);line-height:1.65}
+
+/* SECURITY */
+.sec-split{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.orbit-stage{position:relative;height:400px}
+.shield{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:110px;height:110px;background:rgba(61,127,255,.1);border:2px solid rgba(61,127,255,.28);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.8rem;z-index:5;box-shadow:0 0 60px rgba(61,127,255,.18)}
+.orb-ring{position:absolute;top:50%;left:50%;border-radius:50%;border:1px dashed rgba(61,127,255,.12);transform:translate(-50%,-50%)}
+.orb-ring.r1{width:190px;height:190px;animation:orbSpin 20s linear infinite}
+.orb-ring.r2{width:280px;height:280px;animation:orbSpin 32s linear infinite reverse;border-color:rgba(0,212,180,.1)}
+.orb-ring.r3{width:370px;height:370px;animation:orbSpin 44s linear infinite;border-color:rgba(123,95,255,.08)}
+@keyframes orbSpin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.orb-dot{position:absolute;width:10px;height:10px;border-radius:50%;top:-5px;left:50%;transform:translateX(-50%)}
+.r1 .orb-dot{background:var(--blue);box-shadow:0 0 12px var(--blue)}
+.r2 .orb-dot{background:var(--teal);box-shadow:0 0 12px var(--teal);top:auto;bottom:-5px}
+.r3 .orb-dot{background:var(--violet);box-shadow:0 0 12px var(--violet)}
+.sec-list{display:flex;flex-direction:column;gap:13px}
+.si{display:flex;align-items:center;gap:15px;background:var(--card);border:1px solid var(--border);border-radius:13px;padding:16px 18px;transition:all .2s}
+.si:hover{border-color:rgba(61,127,255,.25);transform:translateX(6px)}
+.si-ico{width:40px;height:40px;border-radius:11px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1rem}
+.si-t{font-weight:600;color:var(--bright);font-size:.9rem;margin-bottom:3px}
+.si-d{font-size:.78rem;color:var(--muted)}
+
+/* DEVELOPER */
+.dev-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.code-block{background:#060b18;border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.code-header{display:flex;align-items:center;gap:8px;padding:14px 18px;background:rgba(255,255,255,.03);border-bottom:1px solid var(--border)}
+.dot-r{width:11px;height:11px;border-radius:50%;background:#ff5a5a}
+.dot-y{width:11px;height:11px;border-radius:50%;background:#f0c040}
+.dot-g{width:11px;height:11px;border-radius:50%;background:#00d4b4}
+.code-filename{font-size:.75rem;color:var(--muted);margin-left:6px;letter-spacing:.04em}
+.code-body{padding:22px 24px;font-size:.79rem;line-height:1.9;font-family:'Courier New',monospace}
+.kw{color:#7b9fff}.fn{color:var(--teal)}.str{color:#f0a060}.cm{color:#3b4e72}.pn{color:var(--text)}
+.dev-cards{display:flex;flex-direction:column;gap:14px}
+.dev-card{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:18px 20px;display:flex;align-items:flex-start;gap:14px;transition:all .2s}
+.dev-card:hover{border-color:rgba(61,127,255,.25);transform:translateX(5px)}
+.dev-ico{width:42px;height:42px;border-radius:11px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.dev-card-t{font-weight:600;color:var(--bright);font-size:.9rem;margin-bottom:4px}
+.dev-card-d{font-size:.8rem;color:var(--muted);line-height:1.65}
+
+/* FEATURES */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.feat{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:26px 22px;transition:all .3s}
+.feat:hover{border-color:rgba(61,127,255,.25);transform:translateY(-3px)}
+.feat-ico{font-size:1.6rem;margin-bottom:14px}
+.feat-t{font-family:'Bricolage Grotesque',sans-serif;font-size:1rem;font-weight:700;color:var(--bright);margin-bottom:8px}
+.feat-d{font-size:.83rem;color:var(--muted);line-height:1.7}
+
+/* TESTIMONIALS */
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.testi{background:var(--card);border:1px solid var(--border);border-radius:17px;padding:26px;transition:all .3s}
+.testi:hover{transform:translateY(-4px);border-color:rgba(61,127,255,.2)}
+.testi.hi{background:linear-gradient(135deg,rgba(61,127,255,.09),rgba(123,95,255,.05));border-color:rgba(61,127,255,.22)}
+.stars{color:var(--gold);font-size:.8rem;letter-spacing:2px;margin-bottom:14px}
+.testi-q{font-size:.875rem;color:var(--text);line-height:1.75;font-style:italic;margin-bottom:18px}
+.testi-auth{display:flex;align-items:center;gap:11px}
+.t-ava{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0}
+.t-n{font-size:.85rem;font-weight:600;color:var(--bright)}
+.t-r{font-size:.73rem;color:var(--muted)}
+
+/* FAQ */
+.faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.faq-item{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:20px 22px;cursor:pointer;transition:all .25s}
+.faq-item:hover{border-color:rgba(61,127,255,.22)}
+.faq-item.open{border-color:rgba(61,127,255,.28);background:rgba(61,127,255,.04)}
+.faq-q{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:.89rem;font-weight:600;color:var(--bright)}
+.faq-arrow{color:var(--muted);font-size:1rem;transition:transform .25s;flex-shrink:0}
+.faq-item.open .faq-arrow{transform:rotate(45deg);color:var(--blue)}
+.faq-a{font-size:.83rem;color:var(--muted);line-height:1.7;max-height:0;overflow:hidden;transition:all .3s ease;margin-top:0}
+.faq-item.open .faq-a{max-height:200px;margin-top:12px}
+
+/* CONTACT */
+.contact-wrap{max-width:680px;margin:0 auto;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:48px 50px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:15px}
+.field{display:flex;flex-direction:column;gap:7px}
+.field.full{grid-column:span 2}
+.field label{font-size:.75rem;font-weight:600;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.field input,.field select,.field textarea{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:9px;padding:12px 15px;color:var(--text);font-size:.875rem;font-family:'Inter',sans-serif;outline:none;transition:border .2s;resize:none}
+.field select option{background:var(--card)}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:rgba(61,127,255,.4)}
+.field input::placeholder,.field textarea::placeholder{color:var(--muted)}
+.form-submit{width:100%;padding:14px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:.95rem;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;margin-top:4px;transition:all .2s;box-shadow:0 0 24px rgba(61,127,255,.3)}
+.form-submit:hover{background:#2d70f0;box-shadow:0 6px 32px rgba(61,127,255,.48)}
+
+/* CTA */
+.cta-section{padding:80px 64px;position:relative;z-index:10;overflow:hidden}
+.cta-box{max-width:860px;margin:0 auto;text-align:center;border-radius:26px;padding:68px 56px;background:linear-gradient(135deg,rgba(61,127,255,.11),rgba(123,95,255,.07));border:1px solid rgba(61,127,255,.22);position:relative;overflow:hidden}
+.cta-glow{position:absolute;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(61,127,255,.11) 0%,transparent 70%);top:-100px;right:-80px;pointer-events:none}
+.cta-box h2{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(1.9rem,3.5vw,2.8rem);font-weight:800;letter-spacing:-.035em;color:var(--bright);margin-bottom:14px;position:relative}
+.cta-box p{color:var(--muted);font-size:.97rem;line-height:1.72;margin-bottom:34px;position:relative}
+.cta-btns{display:flex;gap:14px;justify-content:center;position:relative}
+.btn-cta{padding:14px 34px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:.97rem;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:all .25s;box-shadow:0 0 26px rgba(61,127,255,.35)}
+.btn-cta:hover{transform:translateY(-2px);box-shadow:0 8px 36px rgba(61,127,255,.52)}
+.btn-cta2{padding:14px 34px;background:rgba(255,255,255,.06);color:var(--text);border:1px solid var(--border);border-radius:10px;font-size:.97rem;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s}
+.btn-cta2:hover{border-color:var(--blue);color:var(--bright)}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:36px 64px;display:flex;justify-content:space-between;align-items:center;position:relative;z-index:10}
+.foot-logo{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;color:var(--bright);font-size:1.1rem;letter-spacing:-.025em}
+.foot-links{display:flex;gap:26px}
+.foot-links a{color:var(--muted);text-decoration:none;font-size:.82rem;transition:color .2s}
+.foot-links a:hover{color:var(--bright)}
+.foot-copy{font-size:.77rem;color:var(--muted)}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease}
+.reveal.vis{opacity:1;transform:translateY(0)}
+.rd1{transition-delay:.1s}.rd2{transition-delay:.2s}.rd3{transition-delay:.3s}.rd4{transition-delay:.4s}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="#"><div class="logo-mark">⚡</div>SecurePay</a>
+  <ul class="nav-links">
+    <li><a href="#products">Products</a></li>
+    <li><a href="#developer">Developers</a></li>
+    <li><a href="#security">Security</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="btn-g">Sign in</button>
+    <button class="btn-p">Get Started</button>
+  </div>
+</nav>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ti"><span class="ti-dot"></span>2500+ Active Merchants</span>
+    <span class="ti"><span class="ti-dot"></span>₹1,200 Cr+ Transactions</span>
+    <span class="ti"><span class="ti-dot"></span>4.7 App Rating</span>
+    <span class="ti"><span class="ti-dot"></span>PCI DSS Compliant</span>
+    <span class="ti"><span class="ti-dot"></span>RBI &amp; NPCI Compliant</span>
+    <span class="ti"><span class="ti-dot"></span>24×7 Support</span>
+    <span class="ti"><span class="ti-dot"></span>Onboarding in 24–48 Hours</span>
+    <span class="ti"><span class="ti-dot"></span>Zero Hidden Fees</span>
+    <span class="ti"><span class="ti-dot"></span>2500+ Active Merchants</span>
+    <span class="ti"><span class="ti-dot"></span>₹1,200 Cr+ Transactions</span>
+    <span class="ti"><span class="ti-dot"></span>4.7 App Rating</span>
+    <span class="ti"><span class="ti-dot"></span>PCI DSS Compliant</span>
+    <span class="ti"><span class="ti-dot"></span>RBI &amp; NPCI Compliant</span>
+    <span class="ti"><span class="ti-dot"></span>24×7 Support</span>
+    <span class="ti"><span class="ti-dot"></span>Onboarding in 24–48 Hours</span>
+    <span class="ti"><span class="ti-dot"></span>Zero Hidden Fees</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-mesh"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="badge"><div class="badge-dot">✦</div>Payments Solution For Everyone</div>
+      <h1 class="hero-h">Scale Faster,<br><span class="grad">Safer &amp; Smarter</span><br>with SecurePay.</h1>
+      <p class="hero-sub">From seamless payment experiences and smart transaction routing to QR codes, Soundbox UPI, Cards and end-to-end payment infrastructure — SecurePay powers everything that helps you grow.</p>
+      <div class="hero-actions">
+        <button class="btn-hero">Get Started Free <span class="arr">→</span></button>
+        <button class="btn-sec">View Demo</button>
+      </div>
+      <div class="trust-row">
+        <div class="t-avs">
+          <div class="t-av">RK</div><div class="t-av">SP</div><div class="t-av">AM</div><div class="t-av">VN</div>
+        </div>
+        <div class="t-txt">
+          <strong>Trusted by 2500+ merchants across India</strong>
+          Join India's fastest-growing payments platform
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-vis">
+      <div class="vis-scene">
+        <div class="p-card" id="heroCard">
+          <div class="c-shine"></div><div class="c-glare"></div>
+          <div class="c-chip"></div>
+          <div class="c-num">4891  ••••  ••••  7324</div>
+          <div class="c-bot">
+            <div><div class="c-lbl">Merchant</div><div class="c-name">SecurePay Business</div></div>
+            <div class="c-brand">SP</div>
+          </div>
+        </div>
+        <div class="fl fl-1">
+          <div class="fl-ico g">↑</div>
+          <div><div class="fl-lbl">Payment received</div><div class="fl-val pos">+₹18,400</div></div>
+        </div>
+        <div class="fl fl-2">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <div class="sec-ring">🔐</div>
+            <div><div class="fl-mini">Security Status</div><div class="fl-mval" style="color:var(--teal)">Protected ✓</div></div>
+          </div>
+          <div style="font-size:.68rem;color:var(--muted)">PCI DSS L1 · AES-256 Active</div>
+        </div>
+        <div class="fl fl-3">
+          <div class="fl-ico b">⚡</div>
+          <div><div class="fl-mini">Settlement time</div><div class="fl-mval">&lt; 24 hours</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><div class="s-num"><span class="hl">2500</span>+</div><div class="s-lbl">Active Merchants</div></div>
+  <div class="stat"><div class="s-num">₹<span class="hl">1,200</span>Cr+</div><div class="s-lbl">Transactions Processed</div></div>
+  <div class="stat"><div class="s-num"><span class="hl">4.7</span>★</div><div class="s-lbl">App Rating</div></div>
+  <div class="stat"><div class="s-num"><span class="hl">24hr</span></div><div class="s-lbl">Average Onboarding</div></div>
+</div>
+
+<!-- POWERED BY -->
+<div class="partners">
+  <div class="p-lbl">Powered by reliable fintech infrastructure</div>
+  <div class="p-row">
+    <span class="p-item">NPCI</span><span class="p-item">Visa</span><span class="p-item">Mastercard</span>
+    <span class="p-item">RuPay</span><span class="p-item">HDFC</span><span class="p-item">ICICI</span>
+    <span class="p-item">Axis</span><span class="p-item">PhonePe</span>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<section class="sec" id="products">
+  <div class="sec-inner">
+    <div class="reveal">
+      <div class="eyebrow">Platform</div>
+      <h2 class="sec-h">One platform. Every<br>payment solution.</h2>
+      <p class="sec-sub">A powerful, modular payment ecosystem built to simplify collections, strengthen security, and help businesses scale effortlessly — online and offline.</p>
+    </div>
+    <div class="tabs reveal">
+      <button class="tab active" onclick="switchTab('payments',this)">Payments &amp; Collections</button>
+      <button class="tab" onclick="switchTab('banking',this)">Banking &amp; Infrastructure</button>
+      <button class="tab" onclick="switchTab('devices',this)">Devices &amp; On-Ground</button>
+    </div>
+
+    <div class="tab-content active products-grid" id="tab-payments">
+      <div class="prod-card reveal">
+        <div class="pc-ico b">💳</div>
+        <div class="pc-title">Online Payments Gateway</div>
+        <p class="pc-desc">Accept payments via cards, UPI, net banking and wallets. Built for high success rates, quick settlements, and developer-friendly APIs.</p>
+        <span class="tag b">Cards · UPI · Wallets</span><br>
+        <a href="#" class="pc-link">Explore now →</a>
+      </div>
+      <div class="prod-card reveal rd1">
+        <div class="pc-ico t">⬛</div>
+        <div class="pc-title">QR Code Payments</div>
+        <p class="pc-desc">Accept payments through static and dynamic QR codes across all UPI apps. Designed for speed, accuracy, and easy reconciliation.</p>
+        <span class="tag t">Static · Dynamic QR</span><br>
+        <a href="#" class="pc-link">Explore now →</a>
+      </div>
+      <div class="prod-card reveal rd2">
+        <div class="pc-ico v">🖥️</div>
+        <div class="pc-title">POS Solutions</div>
+        <p class="pc-desc">Accept card, UPI, wallet and contactless payments at physical locations. Speed and reliability to keep checkout lines moving.</p>
+        <span class="tag v">Contactless · In-store</span><br>
+        <a href="#" class="pc-link">Explore now →</a>
+      </div>
+      <div class="prod-card reveal">
+        <div class="pc-ico g">🔄</div>
+        <div class="pc-title">Auto Collect</div>
+        <p class="pc-desc">Automate collections using virtual accounts and smart payment identifiers. Reduce manual tracking, improve cash flow.</p>
+        <span class="tag g">Virtual Accounts</span><br>
+        <a href="#" class="pc-link">Explore now →</a>
+      </div>
+      <div class="prod-card reveal rd1">
+        <div class="pc-ico b">📤</div>
+        <div class="pc-title">Payout System</div>
+        <p class="pc-desc">Disburse payments to vendors, partners, or customers in real time. Fast, secure and compliant fund transfers to bank accounts.</p>
+        <span class="tag b">Real-time Payouts</span><br>
+        <a href="#" class="pc-link">Explore now →</a>
+      </div>
+      <div class="prod-card reveal rd2">
+        <div class="pc-ico r">🧾</div>
+        <div class="pc-title">BBPS Platform</div>
+        <p class="pc-desc">Enable utility, telecom, and bill payments through a BBPS-compliant system. A trusted way to pay bills anytime, anywhere.</p>
+        <span class="tag t">BBPS Compliant</span><br>
+        <a href="#" class="pc-link">Explore now →</a>
+      </div>
+    </div>
+
+    <div class="tab-content products-grid" id="tab-banking">
+      <div class="prod-card reveal">
+        <div class="pc-ico b">🔀</div>
+        <div class="pc-title">UPI Switch</div>
+        <p class="pc-desc">Process UPI transactions with speed, reliability, and intelligent routing. Built to handle high volumes with maximum uptime and success rates.</p>
+        <span class="tag b">Smart Routing</span><br>
+        <a href="#" class="pc-link">Explore now →</a>
+      </div>
+      <div class="prod-card reveal rd1">
+        <div class="pc-ico t">🏦</div>
+        <div class="pc-title">Merchant Management Platform</div>
+        <p class="pc-desc">Manage merchants, transactions, settlements and reports from a single unified dashboard. Built for scale and operational efficiency.</p>
+        <span class="tag t">Unified Dashboard</span><br>
+        <a href="#" class="pc-link">Explore now →</a>
+      </div>
+      <div class="prod-card reveal rd2">
+        <div class="pc-ico v">📱</div>
+        <div class="pc-title">Mobile Applications</div>
+        <p class="pc-desc">Access real-time transaction data, settlements, and account insights through our mobile applications — designed for merchants and partners.</p>
+        <span class="tag v">iOS · Android</span><br>
+        <a href="#" class="pc-link">Explore now →</a>
+      </div>
+    </div>
+
+    <div class="tab-content products-grid" id="tab-devices">
+      <div class="prod-card reveal">
+        <div class="pc-ico g">🔊</div>
+        <div class="pc-title">Soundbox</div>
+        <p class="pc-desc">Real-time audio confirmations for UPI payments. Ideal for retail and high-footfall businesses — instant trust, zero payment confusion.</p>
+        <span class="tag g">Audio Confirmation</span><br>
+        <a href="#" class="pc-link">Explore now →</a>
+      </div>
+      <div class="prod-card reveal rd1">
+        <div class="pc-ico t">⬛</div>
+        <div class="pc-title">QR Codes</div>
+        <p class="pc-desc">Secure, easy-to-deploy QR codes that work across all major UPI apps. Simple setup, faster collections, reliable confirmations.</p>
+        <span class="tag t">All UPI Apps</span><br>
+        <a href="#" class="pc-link">Explore now →</a>
+      </div>
+      <div class="prod-card reveal rd2">
+        <div class="pc-ico b">📲</div>
+        <div class="pc-title">Payment App</div>
+        <p class="pc-desc">Turn your smartphone into a payment acceptance tool. Collect, track, and manage payments digitally — anytime, anywhere.</p>
+        <span class="tag b">Mobile-First</span><br>
+        <a href="#" class="pc-link">Explore now →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="sec sec-alt">
+  <div class="sec-inner">
+    <div class="reveal" style="text-align:center">
+      <div class="eyebrow" style="justify-content:center">Getting Started</div>
+      <h2 class="sec-h" style="text-align:center">Go live in 4 simple steps</h2>
+      <p class="sec-sub" style="margin:0 auto 56px;text-align:center">From sign-up to your first payment — typically completed within 24–48 hours.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><div class="step-n">01</div><div class="step-t">Sign Up</div><p class="step-d">Create your account on the Merchant App. Basic details only — no technical complexity.</p></div>
+      <div class="step reveal rd1"><div class="step-n">02</div><div class="step-t">Submit KYC</div><p class="step-d">Upload PAN, Aadhaar, bank account details and business info. Fully encrypted submission.</p></div>
+      <div class="step reveal rd2"><div class="step-n">03</div><div class="step-t">Get Verified</div><p class="step-d">Our team verifies your documents. Onboarding typically completed within 24–48 hours.</p></div>
+      <div class="step reveal rd3"><div class="step-n">04</div><div class="step-t">Start Accepting</div><p class="step-d">You're live. Accept UPI, cards, wallets, QR and in-store payments from day one.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SECURITY -->
+<section class="sec" id="security">
+  <div class="sec-inner">
+    <div class="sec-split">
+      <div class="orbit-stage reveal">
+        <div class="orb-ring r1"><div class="orb-dot"></div></div>
+        <div class="orb-ring r2"><div class="orb-dot"></div></div>
+        <div class="orb-ring r3"><div class="orb-dot"></div></div>
+        <div class="shield">🛡️</div>
+      </div>
+      <div class="reveal rd1">
+        <div class="eyebrow">Security &amp; Compliance</div>
+        <h2 class="sec-h">Your transactions,<br>always protected.</h2>
+        <p class="sec-sub" style="margin-bottom:28px">Privacy is a core part of our architecture. SecurePay follows strict encryption standards and compliance protocols to safeguard every transaction.</p>
+        <div class="sec-list">
+          <div class="si"><div class="si-ico" style="background:rgba(61,127,255,.1)">🔒</div><div><div class="si-t">PCI DSS Compliant</div><div class="si-d">Industry-standard security for all payment card transactions and data</div></div></div>
+          <div class="si"><div class="si-ico" style="background:rgba(0,212,180,.1)">🏛️</div><div><div class="si-t">RBI &amp; NPCI Guidelines</div><div class="si-d">Fully aligned with all applicable Reserve Bank of India regulations</div></div></div>
+          <div class="si"><div class="si-ico" style="background:rgba(123,95,255,.1)">🤖</div><div><div class="si-t">Smart Routing &amp; Monitoring</div><div class="si-d">Multiple banking integrations and real-time monitoring to maximise success rates</div></div></div>
+          <div class="si"><div class="si-ico" style="background:rgba(240,192,64,.1)">🔐</div><div><div class="si-t">End-to-End Encryption</div><div class="si-d">Every transaction encrypted — merchant and customer data always protected</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEVELOPER -->
+<section class="sec sec-alt" id="developer">
+  <div class="sec-inner">
+    <div class="dev-grid">
+      <div class="reveal">
+        <div class="eyebrow">For Developers</div>
+        <h2 class="sec-h">Built for builders<br>who ship fast.</h2>
+        <p class="sec-sub" style="margin-bottom:30px">Our APIs and infrastructure are flexible, reliable, and easy to integrate — so you can focus on building products, not managing payments.</p>
+        <div class="dev-cards">
+          <div class="dev-card">
+            <div class="dev-ico" style="background:rgba(61,127,255,.1)">🔗</div>
+            <div><div class="dev-card-t">Integrations</div><div class="dev-card-d">Ready-to-use integrations across payment gateways, UPI, banking systems, and merchant tools — works with your existing stack.</div></div>
+          </div>
+          <div class="dev-card">
+            <div class="dev-ico" style="background:rgba(0,212,180,.1)">📖</div>
+            <div><div class="dev-card-t">API Reference</div><div class="dev-card-d">Detailed docs with endpoints, request/response formats, auth flows, and best practices. Integrate quickly and confidently.</div></div>
+          </div>
+          <div class="dev-card">
+            <div class="dev-ico" style="background:rgba(123,95,255,.1)">🧪</div>
+            <div><div class="dev-card-t">Dev Studio</div><div class="dev-card-d">Interactive playground to simulate transactions, test edge cases, and validate integrations before going live.</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal rd2">
+        <div class="code-block">
+          <div class="code-header"><div class="dot-r"></div><div class="dot-y"></div><div class="dot-g"></div><span class="code-filename">payment.js</span></div>
+          <div class="code-body">
+<span class="cm">// Initialize SecurePay SDK</span>
+<span class="kw">import</span> <span class="pn">SecurePay</span> <span class="kw">from</span> <span class="str">'@securepay/sdk'</span><span class="pn">;</span>
+
+<span class="kw">const</span> <span class="pn">sp</span> <span class="kw">=</span> <span class="kw">new</span> <span class="fn">SecurePay</span><span class="pn">({</span>
+  <span class="pn">apiKey:</span> <span class="str">'sp_live_xxxxxxxxxxxx'</span><span class="pn">,</span>
+  <span class="pn">mode:</span> <span class="str">'production'</span>
+<span class="pn">});</span>
+
+<span class="cm">// Create a payment order</span>
+<span class="kw">const</span> <span class="pn">order</span> <span class="kw">= await</span> <span class="pn">sp</span><span class="pn">.</span><span class="fn">orders</span><span class="pn">.</span><span class="fn">create</span><span class="pn">({</span>
+  <span class="pn">amount:</span> <span class="str">49900</span><span class="pn">,</span>   <span class="cm">// ₹499.00</span>
+  <span class="pn">currency:</span> <span class="str">'INR'</span><span class="pn">,</span>
+  <span class="pn">receipt:</span> <span class="str">'order_001'</span>
+<span class="pn">});</span>
+
+<span class="cm">// Collect via UPI</span>
+<span class="kw">const</span> <span class="pn">payment</span> <span class="kw">= await</span> <span class="pn">sp</span><span class="pn">.</span><span class="fn">upi</span><span class="pn">.</span><span class="fn">collect</span><span class="pn">({</span>
+  <span class="pn">orderId:</span> <span class="pn">order.id,</span>
+  <span class="pn">vpa:</span> <span class="str">'merchant@upi'</span>
+<span class="pn">});</span>
+
+<span class="cm">// ✓ Settlement credited within 24 hrs</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY SECUREPAY -->
+<section class="sec">
+  <div class="sec-inner">
+    <div class="reveal" style="text-align:center">
+      <div class="eyebrow" style="justify-content:center">Why SecurePay</div>
+      <h2 class="sec-h" style="text-align:center">Secure. Scalable.<br>Production-ready from day one.</h2>
+      <p class="sec-sub" style="margin:0 auto 52px;text-align:center">Everything you need to collect payments, stay in control, and grow without friction.</p>
+    </div>
+    <div class="feat-grid">
+      <div class="feat reveal"><div class="feat-ico">🕐</div><div class="feat-t">24×7 Support</div><p class="feat-d">Payments don't sleep. Neither do we. Round-the-clock assistance to resolve issues fast and keep your business running.</p></div>
+      <div class="feat reveal rd1"><div class="feat-ico">📊</div><div class="feat-t">Actionable Insights</div><p class="feat-d">Real-time dashboards and detailed reports that turn every transaction into meaningful business intelligence.</p></div>
+      <div class="feat reveal rd2"><div class="feat-ico">🚀</div><div class="feat-t">Fast Onboarding</div><p class="feat-d">Go live in days, not weeks. A simple, guided process — no technical complexity required.</p></div>
+      <div class="feat reveal"><div class="feat-ico">🧩</div><div class="feat-t">Built-for-Business Products</div><p class="feat-d">Reliable QR codes, Soundbox devices, and in-store solutions that perform consistently across every business environment.</p></div>
+      <div class="feat reveal rd1"><div class="feat-ico">🏗️</div><div class="feat-t">Enterprise-Grade Reliability</div><p class="feat-d">High uptime, rigorous testing, and secure infrastructure built to handle scale without compromise.</p></div>
+      <div class="feat reveal rd2"><div class="feat-ico">📈</div><div class="feat-t">Measurable Results</div><p class="feat-d">Clear visibility into transactions, settlements, and performance — so you always know what's working.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="sec sec-alt">
+  <div class="sec-inner">
+    <div class="reveal" style="text-align:center;margin-bottom:48px">
+      <div class="eyebrow" style="justify-content:center">Merchant Stories</div>
+      <h2 class="sec-h" style="text-align:center">Trusted by the best</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi hi reveal">
+        <div class="stars">★★★★★</div>
+        <p class="testi-q">"SecurePay's API cut our integration time drastically. We went from setup to accepting payments in under two days. The fraud monitoring alone has saved us significantly."</p>
+        <div class="testi-auth"><div class="t-ava" style="background:linear-gradient(135deg,#3d7fff,#7b5fff)">RK</div><div><div class="t-n">Rohit Kumar</div><div class="t-r">Founder, QuickShop India</div></div></div>
+      </div>
+      <div class="testi reveal rd1">
+        <div class="stars">★★★★★</div>
+        <p class="testi-q">"The Soundbox device transformed our retail counter. Every customer gets instant audio confirmation — zero payment confusion, and trust is built immediately."</p>
+        <div class="testi-auth"><div class="t-ava" style="background:linear-gradient(135deg,#00d4b4,#3d7fff)">SP</div><div><div class="t-n">Sunita Patel</div><div class="t-r">Retailer, Ahmedabad</div></div></div>
+      </div>
+      <div class="testi reveal rd2">
+        <div class="stars">★★★★★</div>
+        <p class="testi-q">"No setup fees, transparent pricing, daily settlements. SecurePay keeps things simple and honest. The merchant dashboard gives real-time clarity on everything."</p>
+        <div class="testi-auth"><div class="t-ava" style="background:linear-gradient(135deg,#f0c040,#ff7a3d)">AV</div><div><div class="t-n">Amit Verma</div><div class="t-r">CEO, UrbanKart</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="sec" id="faq">
+  <div class="sec-inner">
+    <div class="reveal" style="text-align:center;margin-bottom:48px">
+      <div class="eyebrow" style="justify-content:center">FAQ</div>
+      <h2 class="sec-h" style="text-align:center">Frequently Asked Questions</h2>
+    </div>
+    <div class="faq-grid reveal">
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">What is SecurePay and how does it work? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">SecurePay is a unified digital payment solution that allows businesses to accept, process, and manage transactions securely. It connects merchants to multiple payment channels through our gateway, ensuring fast settlements, encrypted data flow, and real-time reporting — for startups to enterprises.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">What payment methods are supported? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">SecurePay supports UPI, credit and debit cards, wallets, net banking, QR code payments, and in-store payment modes via POS and Soundbox — any payment type, online or offline, from a single dashboard.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">How long does onboarding take? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">Onboarding is typically completed within 24–48 hours after successful document verification. Required documents include PAN, Aadhaar, bank account details, and business information (if applicable).</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">Are there setup or monthly fees? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">No. You only pay per transaction. There are no setup fees, no monthly minimums, and no hidden costs. Transaction charges vary by payment method and are communicated transparently during onboarding.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">When will I receive my settlements? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">Settlements are processed daily and typically credited within 24 hours. Minor delays may occur on weekends or bank holidays, as per banking partner policies.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">Is SecurePay RBI &amp; PCI DSS compliant? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">Yes. SecurePay is PCI-DSS compliant and operates in full alignment with applicable RBI and NPCI guidelines. All transaction data is encrypted and processed according to regulatory standards.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">Does SecurePay support recurring payments? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">Yes. With Auto Collect and smart payment identifiers, you can automate and schedule recurring collections — reducing manual follow-ups and improving cash flow.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">Is there a sandbox environment for developers? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">Yes. Our Dev Studio provides an interactive sandbox where developers can simulate transactions, test edge cases, and validate integrations fully before going live.</div>
+      </div>
+    </div>
+    <p class="reveal" style="text-align:center;margin-top:30px;font-size:.875rem;color:var(--muted)">Have more questions? <a href="#contact" style="color:var(--blue);text-decoration:none">Visit our Support Page →</a></p>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="sec sec-alt" id="contact">
+  <div class="sec-inner">
+    <div class="reveal" style="text-align:center;margin-bottom:48px">
+      <div class="eyebrow" style="justify-content:center">Get In Touch</div>
+      <h2 class="sec-h" style="text-align:center">Let's get you to the<br>right place.</h2>
+      <p class="sec-sub" style="margin:12px auto 0;text-align:center">We just need a few quick details and our team will be in touch shortly.</p>
+    </div>
+    <div class="contact-wrap reveal">
+      <div class="form-grid">
+        <div class="field"><label>Full Name</label><input type="text" placeholder="Your full name"></div>
+        <div class="field"><label>State</label>
+          <select>
+            <option value="">Select state</option>
+            <option>Maharashtra</option><option>Delhi</option><option>Karnataka</option>
+            <option>Tamil Nadu</option><option>Gujarat</option><option>Rajasthan</option>
+            <option>Uttar Pradesh</option><option>West Bengal</option>
+          </select>
+        </div>
+        <div class="field"><label>City</label><input type="text" placeholder="Your city"></div>
+        <div class="field"><label>Services</label>
+          <select>
+            <option value="">Select service</option>
+            <option>Payment Gateway</option><option>QR Code Payments</option>
+            <option>POS Solutions</option><option>Soundbox</option>
+            <option>Payout System</option><option>API / Developer</option>
+            <option>Enterprise Solution</option>
+          </select>
+        </div>
+        <div class="field full"><label>Message</label><textarea rows="4" placeholder="Tell us about your business and what you'd like to achieve..."></textarea></div>
+      </div>
+      <button class="form-submit">Send Message →</button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-box reveal">
+    <div class="cta-glow"></div>
+    <h2>Start accepting payments<br>in hours, not weeks.</h2>
+    <p>Join 2500+ businesses growing with SecurePay.<br>No setup fees. No monthly charges. Just results.</p>
+    <div class="cta-btns">
+      <button class="btn-cta">Get Started Free →</button>
+      <button class="btn-cta2">Talk to sales</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-logo">⚡ SecurePay</div>
+  <div class="foot-links">
+    <a href="#">Privacy Policy</a><a href="#">Terms of Service</a>
+    <a href="#">Security</a><a href="#">API Docs</a>
+    <a href="#">Status</a><a href="#contact">Contact</a>
+  </div>
+  <div class="foot-copy">© 2026 SecurePay Technologies Pvt. Ltd.</div>
+</footer>
+
+<script>
+// Scroll reveal
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('vis') });
+}, {threshold: 0.08});
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// Tab switching
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+  document.querySelectorAll('#tab-' + id + ' .reveal').forEach(el => {
+    el.classList.remove('vis');
+    setTimeout(() => { el.classList.add('vis'); }, 80);
+  });
+}
+
+// FAQ accordion
+function toggleFaq(el) {
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(f => f.classList.remove('open'));
+  if (!isOpen) el.classList.add('open');
+}
+
+// Hero card mouse tilt
+document.addEventListener('mousemove', e => {
+  const card = document.getElementById('heroCard');
+  if (!card) return;
+  const x = (e.clientX / window.innerWidth - 0.5) * 14;
+  const y = (e.clientY / window.innerHeight - 0.5) * 10;
+  card.style.transform = `rotateY(${-9 + x}deg) rotateX(${5 - y}deg)`;
+  card.style.animation = 'none';
+});
+document.addEventListener('mouseleave', () => {
+  const card = document.getElementById('heroCard');
+  if (card) { card.style.transform = ''; card.style.animation = ''; }
+});
+</script>
+</body>
+</html>
